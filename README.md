@@ -1,13 +1,13 @@
 # Moves App
 
-![Team Photo](Insert a Team Photo URL here)
-[*how?*](https://help.github.com/articles/about-readmes/#relative-links-and-image-paths-in-readme-files)
+![Team Photo](https://i.ibb.co/2S2JWF9/group-pic.jpg)
 
-TODO: short project description, some sample screenshots or mockups
+
+TODO: Make an app that helps people make cool plans in the real world.
 
 ## Architecture
 
-TODO:  descriptions of code organization and tools and libraries used
+TODO:  React Native Starter Pack combined with our own API utilizing MongoDB for the backend.
 
 ## Setup
 
@@ -19,6 +19,8 @@ TODO: how to deploy the project
 
 ## Authors
 
-TODO: list of authors
+CJ Wheelan, Jon Jafarnia, Harry Irwin, Shaamil Karim, Cam Keith
 
 ## Acknowledgments
+
+Tim Tregubov & our lovely TAs Liz Frey and Zach Gottesman
