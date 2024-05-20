@@ -11,7 +11,7 @@ TODO:  React Native Starter Pack combined with our own API utilizing MongoDB for
 
 ## Setup
 
-TODO: how to get the project dev environment up and running, npm install etc
+TODO: Setting up expo for react native and using starterpacls along with other dependencies already used.
 
 ## Deployment
 
