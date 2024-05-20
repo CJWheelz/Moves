@@ -12,6 +12,11 @@ TODO:  React Native Starter Pack combined with our own API utilizing MongoDB for
 ## Setup
 
 TODO: how to get the project dev environment up and running, npm install etc
+brew install node
+brew install watchman
+npm install --global yarn
+yarn global add expo-cli
+npm run ios
 
 ## Deployment
 
