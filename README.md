@@ -18,6 +18,7 @@ npm install --global yarn
 yarn global add expo-cli
 npm run ios
 
+
 ## Deployment
 
 TODO: how to deploy the project
