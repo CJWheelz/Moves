@@ -47,7 +47,6 @@ const MapWithRadius = ({ navigation }) => {
       setJoinCode_create(response.data);
       setJoinCode2_join(response.data);
       console.log(response.data);
-      navigation.navigate('JoinMove');
     } catch (error) {
       alert('Create Move Failed: ' + error);
     }

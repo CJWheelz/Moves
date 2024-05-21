@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { TextInput, navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
-import { Label } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import useStore from '../store';
 
@@ -12,7 +11,7 @@ const ShareMove = ( {navigation} ) => {
     <SafeAreaView style={styles.container}>
         <Text style={styles.title}> Join a Move </Text>
         <View>
-          <Label text="test" />
+          <Text text="test" />
         </View>
         <TouchableOpacity style={styles.button}> 
             <Text style={styles.button.text}>
