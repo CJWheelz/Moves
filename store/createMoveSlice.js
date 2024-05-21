@@ -38,7 +38,8 @@ export default function createMoveSlice(set, get) {
             location: get().createMoveSlice.location,
             radius: get().createMoveSlice.radius,
           }); 
-          navigation.navigate('joinMove');
+          navigation.navigate('JoinMove');
+          return response;
           //,{
           //   headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
           // });
