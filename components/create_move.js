@@ -4,12 +4,11 @@ import MapView, { Circle } from 'react-native-maps';
 import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
-import { useStore } from '../store';
+import useStore from '../store';
 // import { Ionicons } from '@expo/vector-icons';
-// import useStore from '../store'; 
 // const createMove = useStore((state) => state.createMove);
 
-const MapWithRadius = ({author, navigation}) => {
+const MapWithRadius = ({navigation}) => {
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -19,6 +18,12 @@ const MapWithRadius = ({author, navigation}) => {
   });
 
   const [radius, setRadius] = useState(1609); // 1 mile in meters
+  const setRadiusSlice = useStore((state) => state.createMoveSlice.setRadius);
+  const setLocationSlice = useStore((state) => state.createMoveSlice.setLocation);
+  const creator = useStore((state) => state.createMoveSlice.creator);
+  const createMove = useStore((state) => state.createMoveSlice.createMove);
+  const setJoinCode_create = useStore((state) => state.createMoveSlice.setJoinCode);
+  const setJoinCode2_join = useStore((state) => state.joinMoveSlice.setJoinCode);
 
   useEffect(() => {
     if (mapRef.current) {
@@ -30,7 +35,7 @@ const MapWithRadius = ({author, navigation}) => {
     // alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
     event.preventDefault();
     const moveInitInfo = {
-      creator: author,
+      creator: creator,
       questions: [], // Add questions here
       location: {
         latitude: region.latitude,
@@ -39,17 +44,24 @@ const MapWithRadius = ({author, navigation}) => {
       radius: radius,
       status: 'IN_PROGRESS',
     };
-
-   
-
-
+    await setRadiusSlice(radius);
+    await setLocationSlice(moveInitInfo.location);
+    try {
+      const response = await createMove(navigation);
+      setJoinCode_create(response.data.joinCode);
+      setJoinCode2_join(response.data.joinCode);
+      navigation.navigate('joinMove');
+    } catch (error) {
+      alert('Create Move Failed: ' + error);
+    }
+  
   //     await createMove(moveInitInfo);
   //   };
   //   const cancel = async (e) => {
   //     e.preventDefault();
   //     navigation.navigate('Welcome');
   //   };
-    navigation.navigate('WaitingRoom');
+  //   return (
   }
 
   const handleZoom = (type) => {
@@ -105,16 +117,16 @@ const MapWithRadius = ({author, navigation}) => {
         />
       </MapView>
   
-  <Icon style={styles.zoom}
+  {/* <Icon style={styles.zoom}
   name='zoom-in'
   type='material'
   onPress={() => handleZoom('in')}
-  />
-  <Icon
+  /> */}
+  {/* <Icon
     name='zoom-out'
     type='material'
     onPress={() => handleZoom('out')}
-  />
+  /> */}
       <View style={styles.buttonContainer}>
       <TouchableOpacity onPress={handleButtonPress}> 
             <Text style={styles.buttonContainer.text}>

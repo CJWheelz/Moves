@@ -2,24 +2,37 @@ import React, { useState } from 'react';
 import { navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Input } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
+import useStore from '../store';
 
 const Welcome = ( {navigation} ) => {
 
-    const [name, setName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [user, setUser] = useState('');
+    const setUserSlice = useStore((state) => state.joinMoveSlice.setUser);
+    const setCreateSlice = useStore((state) => state.createMoveSlice.setCreator);
 
     const handleCreateMove = () => {
+      if (user) {
+        setUserSlice(user);
+        setCreateSlice(user);
         navigation.navigate('CreateMove');
+      } else {
+        alert('Please enter a name');
+      }
     }
     const handleJoinMove = () => {
+      if (user) {
+        setUserSlice(user);
         navigation.navigate('JoinMove');
+      } else {
+        alert('Please enter a name');
+      }
     }
-
+ 
   return (
     <SafeAreaView style={styles.container}>
         <Text style={styles.title}> Moves </Text>
         <View>
-        <Input placeholder='name' onChange={setName} inputContainerStyle={styles.input} />
+        <Input placeholder='name' onChange={setUser} inputContainerStyle={styles.input} />
         {/* <Input placeholder='phone number' onChange={setPhoneNumber} inputContainerStyle={styles.input} /> */}
         </View>
         <TouchableOpacity onPress={handleCreateMove} style={styles.button}> 

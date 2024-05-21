@@ -1,22 +1,35 @@
-import React, { act, useState } from 'react';
+import React, { act, useEffect, useState } from 'react';
 import { navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
+import useStore from '../store';
 
 // Add incoming question data??
 const Question = ( {route} ) => {
 
   // const prompt = 'Is this Romantic?';
-
+  const getQuestion = useStore((state) => state.joinMoveSlice.getQuestion);
   const currentQuestionIndex = route.params.current;
-  const prompt = route.params.prompts[currentQuestionIndex];
+  // const prompt = route.params.prompts[currentQuestionIndex];
+  const [prompt, setPrompt] = useState('');
   // console.log(actualPrompt);
+  const submitResponse = useStore((state) => state.joinMoveSlice.submitResponse);
 
-  const handleYes = () => {
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      const question = await getQuestion(); // Assuming getQuestion is async
+      setPrompt(question);
+    };
+    fetchQuestion();
+  }, []);
+
+  const handleYes = async () => {
+    await submitResponse(true);
     alert("YESSS")
     const newIndex = currentQuestionIndex + 1;
     
   }
 
-  const handleNo = () => {
+  const handleNo = async () => {
+    await submitResponse(false);
     alert("NOOOO")
   }
 

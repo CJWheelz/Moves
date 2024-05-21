@@ -2,22 +2,33 @@ import React, { useState } from 'react';
 import { TextInput, navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Input } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
+import useStore from '../store';
 
 const JoinMove = ( {navigation} ) => {
-
-  const testCode = 1234;
 
   const [code, setCode] = useState('');
 
   const handleCodeEnter = (event) => {
     setCode(event.nativeEvent.text);
   } 
+  const user = useStore((state) => state.joinMoveSlice.user);
+  const joinMove = useStore((state) => state.joinMoveSlice.joinMove);
 
-  const handleTestCode = () => {
-    if (code == testCode) {
-      navigation.navigate('Question', { prompts: ["Is this Romantic?", "Do you want to drink?"], current: 0});
-    } else {
-      alert('Code does not work :(');
+  const handleTestCode = async () => {
+    if (!code) {
+      alert('Please enter a code');
+      return;
+    }
+
+    try {
+      const response = await joinMove(code, user);
+    
+      if (response) {
+        useStore((state) => state.joinMoveSlice.setMoveId(response.data.moveId));
+        navigation.navigate('Question');
+      }
+    } catch (error) {
+      alert('Join Move Failed: ' + error);
     }
   }
 
