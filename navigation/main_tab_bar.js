@@ -18,7 +18,7 @@ const MainTabBar = () => {
  
     return (
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerBackVisible: true, headerTransparent: true, headerTitle: '' }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="CreateMove" component={CreateMove}/>
           <Stack.Screen name="JoinMove" component={JoinMove} />
