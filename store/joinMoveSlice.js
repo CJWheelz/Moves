@@ -51,12 +51,12 @@ export default function joinMoveSlice(set, get) {
       },
       joinMove: async (code, user) => {
         try {
-          const response = await axios.post(`${ROOT_URL}/create`, {
-            code: get().joinMoveSlice.moveId,
+          const response = await axios.post(`${ROOT_URL}/create?code:${code}`, {
             user: get().joinMoveSlice.user,
           });
+          console.log(response);
           set (state => {
-            state.moveSlice.questionId = response.data.questionId;
+            state.joinMoveSlice.questionId = 0; // response.data.questionId;
           });
         } catch (error) {
           alert('Join Move Failed: ' + error);

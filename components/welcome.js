@@ -36,7 +36,7 @@ const Welcome = ( {navigation} ) => {
     <SafeAreaView style={styles.container}>
         <Text style={styles.title}> Moves </Text>
         <View>
-        <Input placeholder='name' onChange={handleSetUser} inputContainerStyle={styles.input} />
+        <Input placeholder='name' onChangeText={setUser} inputContainerStyle={styles.input} />
         {/* <Input placeholder='phone number' onChange={setPhoneNumber} inputContainerStyle={styles.input} /> */}
         </View>
         <TouchableOpacity onPress={handleCreateMove} style={styles.button}> 

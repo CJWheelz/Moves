@@ -48,9 +48,10 @@ const MapWithRadius = ({navigation}) => {
     await setLocationSlice(moveInitInfo.location);
     try {
       const response = await createMove(navigation);
-      setJoinCode_create(response.data.joinCode);
-      setJoinCode2_join(response.data.joinCode);
-      navigation.navigate('joinMove');
+      setJoinCode_create(response.data);
+      setJoinCode2_join(response.data);
+      console.log(response.data);
+      navigation.navigate('JoinMove');
     } catch (error) {
       alert('Create Move Failed: ' + error);
     }

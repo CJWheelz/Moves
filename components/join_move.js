@@ -21,7 +21,10 @@ const JoinMove = ( {navigation} ) => {
     }
 
     try {
+      console.log(code);
+      console.log(user);
       const response = await joinMove(code, user);
+      //console.log(response);
     
       if (response) {
         useStore((state) => state.joinMoveSlice.setMoveId(response.data.moveId));
