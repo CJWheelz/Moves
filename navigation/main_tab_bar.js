@@ -9,7 +9,7 @@ import SearchTab from './search_tab';
 import CreateMove from '../components/create_move';
 import JoinMove from '../components/join_move';
 import Welcome from '../components/welcome';
-
+import WaitingRoom from '../components/waiting_room';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -22,6 +22,7 @@ const MainTabBar = () => {
         <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="CreateMove" component={CreateMove}/>
           <Stack.Screen name="JoinMove" component={JoinMove} />
+          <Stack.Screen name="WaitingRoom" component={WaitingRoom} />
         </Stack.Navigator>
       </NavigationContainer>
     );

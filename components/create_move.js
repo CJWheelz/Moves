@@ -8,7 +8,7 @@ import Slider from '@react-native-community/slider';
 // import useStore from '../store'; 
 // const createMove = useStore((state) => state.createMove);
 
-const MapWithRadius = ({author}) => {
+const MapWithRadius = ({author, navigation}) => {
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -23,7 +23,7 @@ const MapWithRadius = ({author}) => {
     }
   }, [region]);
     const handleButtonPress = async (event) => {
-      alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
+      // alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
       event.preventDefault();
       const moveInitInfo = {
         creator: author,
@@ -35,13 +35,15 @@ const MapWithRadius = ({author}) => {
     radius: radius,
     status: 'IN_PROGRESS',
    };
+
   //     await createMove(moveInitInfo);
   //   };
   //   const cancel = async (e) => {
   //     e.preventDefault();
   //     navigation.navigate('Welcome');
   //   };
-
+    navigation.navigate('WaitingRoom');
+  }
 
   const handleZoom = (type) => {
     console.log('handleZoom called', type);
@@ -172,5 +174,5 @@ zoom: {
     padding: 10,
   }
 });
-}
+
 export default MapWithRadius;
