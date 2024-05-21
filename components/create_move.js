@@ -17,25 +17,28 @@ const MapWithRadius = ({author, navigation}) => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
-  const [radius, setRadius] = useState(8047); // 5 miles in meters
+
+  const [radius, setRadius] = useState(1609); // 1 mile in meters
+
   useEffect(() => {
     if (mapRef.current) {
       mapRef.current.animateToRegion(region);
     }
   }, [region]);
-    const handleButtonPress = async (event) => {
-      // alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
-      event.preventDefault();
-      const moveInitInfo = {
-        creator: author,
-        questions: [], // Add questions here
-        location: {
-          latitude: region.latitude,
-          longitude: region.longitude,
-    },
-    radius: radius,
-    status: 'IN_PROGRESS',
-   };
+
+  const handleButtonPress = async (event) => {
+    // alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
+    event.preventDefault();
+    const moveInitInfo = {
+      creator: author,
+      questions: [], // Add questions here
+      location: {
+        latitude: region.latitude,
+        longitude: region.longitude,
+      },
+      radius: radius,
+      status: 'IN_PROGRESS',
+    };
 
    
 
@@ -106,12 +109,12 @@ const MapWithRadius = ({author, navigation}) => {
   name='zoom-in'
   type='material'
   onPress={() => handleZoom('in')}
-/>
-<Icon
-  name='zoom-out'
-  type='material'
-  onPress={() => handleZoom('out')}
-/>
+  />
+  <Icon
+    name='zoom-out'
+    type='material'
+    onPress={() => handleZoom('out')}
+  />
       <View style={styles.buttonContainer}>
       <TouchableOpacity onPress={handleButtonPress}> 
             <Text style={styles.buttonContainer.text}>

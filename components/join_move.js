@@ -1,26 +1,57 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { TextInput, navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Input } from 'react-native-elements';
 import { BackgroundImage } from 'react-native-elements/dist/config';
 
-const JoinMove = () => {
-    const handleCreateMove = () => {
-        console.log('Create Move');
+const JoinMove = ( {navigation} ) => {
+
+  const testCode = 1234;
+
+  const [code, setCode] = useState('');
+
+  const handleCodeEnter = (event) => {
+    setCode(event.nativeEvent.text);
+  } 
+
+  const handleTestCode = () => {
+    if (code == testCode) {
+      navigation.navigate('Question', { prompts: ["Is this Romantic?", "Do you want to drink?"], current: 0});
+    } else {
+      alert('Code does not work :(');
     }
-    const handleJoinMove = () => {
-        console.log('Join Move');
-    }
+  }
 
   return (
-    <View style={styles.container}>
-        <Text style={styles.title}> JoinMove </Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+        <Text style={styles.title}> Join a Move </Text>
+        <View>
+          <Input placeholder='Enter Code' onChange={handleCodeEnter} inputContainerStyle={styles.input} />
+        </View>
+        <TouchableOpacity onPress={handleTestCode} style={styles.button}> 
+            <Text style={styles.button.text}>
+              Join Move
+            </Text>
+        </TouchableOpacity>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  input: {
+    borderWidth: 3,
+    borderColor: 'black',
+    justifySelf: 'center',
+    alignSelf: 'center',
+    borderRadius: 20,
+    padding: 5,
+    paddingLeft: 20,
+    text: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+    }
+  },
   container: {
-    paddingTop: 50,
-    paddingBottom: 50,
     flex: 1,
     direction: 'column',
     justifyContent: 'center',
