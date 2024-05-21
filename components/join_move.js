@@ -15,7 +15,7 @@ const JoinMove = ( {navigation} ) => {
 
   const handleTestCode = () => {
     if (code == testCode) {
-      navigation.navigate('Question');
+      navigation.navigate('Question', { prompts: ["Is this Romantic?", "Do you want to drink?"], current: 0});
     } else {
       alert('Code does not work :(');
     }
@@ -25,8 +25,7 @@ const JoinMove = ( {navigation} ) => {
     <SafeAreaView style={styles.container}>
         <Text style={styles.title}> Join a Move </Text>
         <View>
-        <Input placeholder='Enter Code' onChange={handleCodeEnter} inputContainerStyle={styles.input} />
-        <Text> {code} </Text>
+          <Input placeholder='Enter Code' onChange={handleCodeEnter} inputContainerStyle={styles.input} />
         </View>
         <TouchableOpacity onPress={handleTestCode} style={styles.button}> 
             <Text style={styles.button.text}>

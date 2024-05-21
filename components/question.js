@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { act, useState } from 'react';
 import { navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
-import { Input } from 'react-native-elements';
-import { BackgroundImage } from 'react-native-elements/dist/config';
 
 // Add incoming question data??
-const Question = ( {navigation} ) => {
+const Question = ( {route} ) => {
 
-  const prompt = 'Is this Romantic?';
+  // const prompt = 'Is this Romantic?';
+
+  const currentQuestionIndex = route.params.current;
+  const prompt = route.params.prompts[currentQuestionIndex];
+  // console.log(actualPrompt);
 
   const handleYes = () => {
     alert("YESSS")
+    const newIndex = currentQuestionIndex + 1;
+    
   }
 
   const handleNo = () => {
@@ -19,11 +23,20 @@ const Question = ( {navigation} ) => {
   return (
     <SafeAreaView style={styles.container}>
         <Text style={styles.title}> {prompt} </Text>
-        <TouchableOpacity onPress={handleYes} style={styles.button}> 
-            <Text style={styles.button.text}>
-              YES
-            </Text>
-        </TouchableOpacity>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handleNo} style={[styles.button, styles.red]}> 
+              <Text style={styles.button.text}>
+                NO
+              </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleYes} style={[styles.button, styles.green]}> 
+              <Text style={styles.button.text}>
+                YES
+              </Text>
+          </TouchableOpacity>
+        </View>
+
     </SafeAreaView>
   );
 }
@@ -35,6 +48,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     gap: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%', // Adjust this width as needed
   },
   title: {
     fontSize: 40,
@@ -49,14 +67,21 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     justifySelf: 'center',
     alignSelf: 'center',
-    width: 50,
+    width: 100,
     borderRadius: 20,
     padding: 10,
+    marginHorizontal: 10, // Add space between buttons
     text: {
         textAlign: 'center',
         fontSize: 20,
         fontWeight: 'bold',
     }
+  },
+  green: {
+    borderColor: 'green',
+  },
+  red: {
+    borderColor: 'red',
   }
 });
 
