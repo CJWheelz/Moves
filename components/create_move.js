@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, navigation, View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MapView, { Circle } from 'react-native-maps';
 import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
+import { Ionicons } from '@expo/vector-icons';
 
-const MapWithRadius = () => {
+const MapWithRadius = ( {navigation} ) => {
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -57,7 +58,6 @@ const MapWithRadius = () => {
           listView: { backgroundColor: 'white' }
         }}
       />
-
       <MapView
         style={{ flex: 1 }}
         ref={mapRef}
