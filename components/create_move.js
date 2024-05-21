@@ -1,14 +1,12 @@
+// i asked chatgpt to fix the map and make it smooth for me, and it worked so i used the code
 import React, { useState, useRef, useEffect } from 'react';
-import { SafeAreaView, navigation, View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MapView, { Circle } from 'react-native-maps';
-import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
 import useStore from '../store';
-// import { Ionicons } from '@expo/vector-icons';
-// const createMove = useStore((state) => state.createMove);
 
-const MapWithRadius = ({navigation}) => {
+const MapWithRadius = ({ navigation }) => {
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -27,13 +25,11 @@ const MapWithRadius = ({navigation}) => {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.animateToRegion(region);
+      mapRef.current.animateToRegion(region, 1000); // Animate map to new region
     }
   }, [region]);
 
-  const handleButtonPress = async (event) => {
-    // alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
-    event.preventDefault();
+  const handleButtonPress = async () => {
     const moveInitInfo = {
       creator: creator,
       questions: [], // Add questions here
@@ -55,31 +51,23 @@ const MapWithRadius = ({navigation}) => {
     } catch (error) {
       alert('Create Move Failed: ' + error);
     }
-  
-  //     await createMove(moveInitInfo);
-  //   };
-  //   const cancel = async (e) => {
-  //     e.preventDefault();
-  //     navigation.navigate('Welcome');
-  //   };
-  //   return (
-  }
+  };
 
   const handleZoom = (type) => {
-    console.log('handleZoom called', type);
     let newDelta = type === 'in' ? region.latitudeDelta / 2 : region.latitudeDelta * 2;
     if (mapRef.current) {
-      mapRef.current.animateToRegion({ 
-        ...region, 
-        latitudeDelta: newDelta, 
-        longitudeDelta: newDelta 
+      mapRef.current.animateToRegion({
+        ...region,
+        latitudeDelta: newDelta,
+        longitudeDelta: newDelta,
       }, 500);
     }
   };
-  
+
   return (
     <View style={{ flex: 1 }}>
-      <GooglePlacesAutocomplete containerStyle={styles.searchBarContainer}
+      <GooglePlacesAutocomplete
+        containerStyle={styles.searchBarContainer}
         placeholder="Search for location"
         fetchDetails={true}
         onPress={(data, details = null) => {
@@ -94,21 +82,17 @@ const MapWithRadius = ({navigation}) => {
           language: 'en',
         }}
         styles={{
-          //center the search bar
-
-          container: { marginTop: 55, flex: 0, position: 'absolute', width: '80%', alignSelf:'center',justifySelf: 'center', zIndex: 1 },
-          listView: { backgroundColor: 'white' }
+          container: { marginTop: 55, flex: 0, position: 'absolute', width: '80%', alignSelf: 'center', zIndex: 1 },
+          listView: { backgroundColor: 'white' },
         }}
       />
       <MapView
         style={{ flex: 1 }}
         ref={mapRef}
         initialRegion={region}
-        onRegionChange={setRegion}
-        // move map to new region
+        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
         region={region}
         zoomEnabled={true}
-
       >
         <Circle
           center={{ latitude: region.latitude, longitude: region.longitude }}
@@ -117,72 +101,54 @@ const MapWithRadius = ({navigation}) => {
           strokeColor="rgba(100, 100, 240, 1)"
         />
       </MapView>
-  
-  {/* <Icon style={styles.zoom}
-  name='zoom-in'
-  type='material'
-  onPress={() => handleZoom('in')}
-  /> */}
-  {/* <Icon
-    name='zoom-out'
-    type='material'
-    onPress={() => handleZoom('out')}
-  /> */}
       <View style={styles.buttonContainer}>
-      <TouchableOpacity onPress={handleButtonPress}> 
-            <Text style={styles.buttonContainer.text}>
-            Create Move
-            </Text>
+        <TouchableOpacity onPress={handleButtonPress}>
+          <Text style={styles.buttonText}>Create Move</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.sliderContainer}>
-      <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>        
-      <Slider
+        <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>
+        <Slider
           style={{ width: '100%', height: 40 }}
           minimumValue={160.934}
           maximumValue={4828.03} // 3 miles in meters
           value={radius}
-          onValueChange={value => setRadius(value)}
+          onValueChange={(value) => setRadius(value)}
           minimumTrackTintColor="#0000FF"
           maximumTrackTintColor="#000000"
         />
       </View>
-
-     
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-zoom: {
-  position: 'absolute',
-  top: 20,
-  right: 20,
-  backgroundColor: 'white',
-  padding: 10,
-  borderRadius: 20,
-},
+  searchBarContainer: {
+    marginTop: 55,
+    flex: 0,
+    position: 'absolute',
+    width: '80%',
+    alignSelf: 'center',
+    zIndex: 1,
+  },
   buttonContainer: {
     position: 'absolute',
     bottom: 110,
-    // decrease height of button
-      height: 50,
-      backgroundColor: 'white',
-
+    height: 50,
+    backgroundColor: 'white',
     padding: 10,
-      borderWidth: 3,
-      borderColor: 'black',
-      justifySelf: 'center',
-      alignSelf: 'center',
-      width: 200,
-      borderRadius: 20,
-      padding: 10,
-      text: {
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-      }
-    
+    borderWidth: 3,
+    borderColor: 'black',
+    justifySelf: 'center',
+    alignSelf: 'center',
+    width: 200,
+    borderRadius: 20,
+    textAlign: 'center',
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   sliderContainer: {
     position: 'absolute',
@@ -192,7 +158,7 @@ zoom: {
     paddingHorizontal: 20,
     backgroundColor: 'white',
     padding: 10,
-  }
+  },
 });
 
 export default MapWithRadius;
