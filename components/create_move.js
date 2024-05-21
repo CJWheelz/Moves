@@ -1,54 +1,155 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from 'react-native';
-import { BackgroundImage } from 'react-native-elements/dist/config';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import MapView, { Circle } from 'react-native-maps';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Slider from '@react-native-community/slider';
 
-const CreateMove = () => {
-    const handleCreateMove = () => {
-        console.log('Create Move');
+const MapWithRadius = () => {
+  const mapRef = useRef(null);
+  const [region, setRegion] = useState({
+    latitude: 37.7749,
+    longitude: -122.4194,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
+  const [radius, setRadius] = useState(8047); // 5 miles in meters
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(region);
     }
-    const handleJoinMove = () => {
-        console.log('Join Move');
+  }, [region]);
+  const handleButtonPress = () => {
+    alert('Move Created!');
+  };
+  const handleZoom = (type) => {
+    console.log('handleZoom called', type);
+    let newDelta = type === 'in' ? region.latitudeDelta / 2 : region.latitudeDelta * 2;
+    if (mapRef.current) {
+      mapRef.current.animateToRegion({ 
+        ...region, 
+        latitudeDelta: newDelta, 
+        longitudeDelta: newDelta 
+      }, 500);
     }
-
+  };
+  
   return (
-    <View style={styles.container}>
-        <Text style={styles.title}> Test </Text>
+    <View style={{ flex: 1 }}>
+      <GooglePlacesAutocomplete containerStyle={styles.searchBarContainer}
+        placeholder="Search for location"
+        fetchDetails={true}
+        onPress={(data, details = null) => {
+          setRegion({
+            ...region,
+            latitude: details.geometry.location.lat,
+            longitude: details.geometry.location.lng,
+          });
+        }}
+        query={{
+          key: 'AIzaSyCIPBNyynklZF6t7snFBUNaYDNP6VoM0EU',
+          language: 'en',
+        }}
+        styles={{
+          container: { marginTop: 50, flex: 0, position: 'absolute', width: '100%', zIndex: 1 },
+          listView: { backgroundColor: 'white' }
+        }}
+      />
+
+      <MapView
+        style={{ flex: 1 }}
+        ref={mapRef}
+        initialRegion={region}
+        onRegionChange={setRegion}
+        // move map to new region
+        region={region}
+        zoomEnabled={true}
+
+      >
+        <Circle
+          center={{ latitude: region.latitude, longitude: region.longitude }}
+          radius={radius}
+          fillColor="rgba(100, 100, 240, 0.5)"
+          strokeColor="rgba(100, 100, 240, 1)"
+        />
+      </MapView>
+      <View style={styles.zoomContainer}>
+  <TouchableOpacity onPress={() => handleZoom('in')}>
+    <Text style={styles.zoomText}>Zoom In</Text>
+  </TouchableOpacity>
+  <TouchableOpacity onPress={() => handleZoom('out')}>
+    <Text style={styles.zoomText}>Zoom Out</Text>
+  </TouchableOpacity>
+</View>
+      <View style={styles.buttonContainer}>
+      <TouchableOpacity onPress={handleButtonPress}> 
+            <Text style={styles.buttonContainer.text}>
+            Create Move
+            </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.sliderContainer}>
+      <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>        
+      <Slider
+          style={{ width: '100%', height: 40 }}
+          minimumValue={160.934}
+          maximumValue={4828.03} // 3 miles in meters
+          value={radius}
+          onValueChange={value => setRadius(value)}
+          minimumTrackTintColor="#0000FF"
+          maximumTrackTintColor="#000000"
+        />
+      </View>
+
+     
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
-    paddingBottom: 50,
-    flex: 1,
-    direction: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
-    gap: 20,
+  zoomContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 50,
+    left: 10,
   },
-  title: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    fontStyle: 'italic',
+  zoomText: {
+    marginTop: 50,
+    margin: 5,
+    fontSize: 20,
+    color: 'blue',
+    fontSize: 20,
   },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 110,
+    // decrease height of button
+      height: 50,
+      backgroundColor: 'white',
 
-  button: {
-    borderWidth: 3,
-    borderColor: 'black',
-    justifySelf: 'center',
-    alignSelf: 'center',
-    width: 200,
-    borderRadius: 20,
     padding: 10,
-    text: {
-        textAlign: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
-    }
+      borderWidth: 3,
+      borderColor: 'black',
+      justifySelf: 'center',
+      alignSelf: 'center',
+      width: 200,
+      borderRadius: 20,
+      padding: 10,
+      text: {
+          textAlign: 'center',
+          fontSize: 20,
+          fontWeight: 'bold',
+      }
+    
+  },
+  sliderContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: 'white',
+    padding: 10,
   }
 });
 
-export default CreateMove;
+export default MapWithRadius;
