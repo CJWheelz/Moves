@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MapView, { Circle } from 'react-native-maps';
+import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
 
@@ -50,7 +51,9 @@ const MapWithRadius = () => {
           language: 'en',
         }}
         styles={{
-          container: { marginTop: 50, flex: 0, position: 'absolute', width: '100%', zIndex: 1 },
+          //center the search bar
+
+          container: { marginTop: 55, flex: 0, position: 'absolute', width: '80%', alignSelf:'center',justifySelf: 'center', zIndex: 1 },
           listView: { backgroundColor: 'white' }
         }}
       />
@@ -72,14 +75,17 @@ const MapWithRadius = () => {
           strokeColor="rgba(100, 100, 240, 1)"
         />
       </MapView>
-      <View style={styles.zoomContainer}>
-  <TouchableOpacity onPress={() => handleZoom('in')}>
-    <Text style={styles.zoomText}>Zoom In</Text>
-  </TouchableOpacity>
-  <TouchableOpacity onPress={() => handleZoom('out')}>
-    <Text style={styles.zoomText}>Zoom Out</Text>
-  </TouchableOpacity>
-</View>
+  
+  <Icon style={styles.zoom}
+  name='zoom-in'
+  type='material'
+  onPress={() => handleZoom('in')}
+/>
+<Icon
+  name='zoom-out'
+  type='material'
+  onPress={() => handleZoom('out')}
+/>
       <View style={styles.buttonContainer}>
       <TouchableOpacity onPress={handleButtonPress}> 
             <Text style={styles.buttonContainer.text}>
@@ -106,19 +112,14 @@ const MapWithRadius = () => {
 };
 
 const styles = StyleSheet.create({
-  zoomContainer: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 50,
-    left: 10,
-  },
-  zoomText: {
-    marginTop: 50,
-    margin: 5,
-    fontSize: 20,
-    color: 'blue',
-    fontSize: 20,
-  },
+zoom: {
+  position: 'absolute',
+  top: 20,
+  right: 20,
+  backgroundColor: 'white',
+  padding: 10,
+  borderRadius: 20,
+},
   buttonContainer: {
     position: 'absolute',
     bottom: 110,
