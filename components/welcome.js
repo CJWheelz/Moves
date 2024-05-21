@@ -1,17 +1,27 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, Button, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { navigation, StyleSheet, View, Text, Image, Button, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Input } from 'react-native-elements';
+import { BackgroundImage } from 'react-native-elements/dist/config';
 
-const Welcome = () => {
+const Welcome = ( {navigation} ) => {
+
+    const [name, setName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+
     const handleCreateMove = () => {
-        console.log('Create Move');
+        navigation.navigate('CreateMove');
     }
     const handleJoinMove = () => {
-        console.log('Join Move');
+        navigation.navigate('JoinMove');
     }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <Text style={styles.title}> Moves </Text>
+        <View>
+        <Input placeholder='name' onChange={setName} inputContainerStyle={styles.input} />
+        <Input placeholder='phone number' onChange={setPhoneNumber} inputContainerStyle={styles.input} />
+        </View>
         <TouchableOpacity onPress={handleCreateMove} style={styles.button}> 
             <Text style={styles.button.text}>
             Create Move
@@ -22,14 +32,26 @@ const Welcome = () => {
                 Join Move
             </Text>
         </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  input: {
+    borderWidth: 3,
+    borderColor: 'black',
+    justifySelf: 'center',
+    alignSelf: 'center',
+    borderRadius: 20,
+    padding: 5,
+    paddingLeft: 20,
+    text: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+    }
+  },
   container: {
-    paddingTop: 50,
-    paddingBottom: 50,
     flex: 1,
     direction: 'column',
     justifyContent: 'center',

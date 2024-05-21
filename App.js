@@ -7,7 +7,7 @@ import Welcome from './components/welcome';
 LogBox.ignoreAllLogs();
 
 const App = (props) => {
-  return <Welcome />;
+  return <MainTabBar />;
 };
 
 
