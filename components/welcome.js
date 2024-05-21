@@ -10,8 +10,12 @@ const Welcome = ( {navigation} ) => {
     const setUserSlice = useStore((state) => state.joinMoveSlice.setUser);
     const setCreateSlice = useStore((state) => state.createMoveSlice.setCreator);
 
+    const handleSetUser = (event) => {
+      setUser(event.nativeEvent.text);
+    }
+
     const handleCreateMove = () => {
-      if (user) {
+      if (user != '') {
         setUserSlice(user);
         setCreateSlice(user);
         navigation.navigate('CreateMove');
@@ -20,7 +24,7 @@ const Welcome = ( {navigation} ) => {
       }
     }
     const handleJoinMove = () => {
-      if (user) {
+      if (user != '') {
         setUserSlice(user);
         navigation.navigate('JoinMove');
       } else {
