@@ -4,6 +4,7 @@ import MapView, { Circle } from 'react-native-maps';
 import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
+import { useStore } from '../store';
 // import { Ionicons } from '@expo/vector-icons';
 // import useStore from '../store'; 
 // const createMove = useStore((state) => state.createMove);
@@ -35,6 +36,9 @@ const MapWithRadius = ({author, navigation}) => {
     radius: radius,
     status: 'IN_PROGRESS',
    };
+
+   
+
 
   //     await createMove(moveInitInfo);
   //   };

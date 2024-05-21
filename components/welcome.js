@@ -20,7 +20,7 @@ const Welcome = ( {navigation} ) => {
         <Text style={styles.title}> Moves </Text>
         <View>
         <Input placeholder='name' onChange={setName} inputContainerStyle={styles.input} />
-        <Input placeholder='phone number' onChange={setPhoneNumber} inputContainerStyle={styles.input} />
+        {/* <Input placeholder='phone number' onChange={setPhoneNumber} inputContainerStyle={styles.input} /> */}
         </View>
         <TouchableOpacity onPress={handleCreateMove} style={styles.button}> 
             <Text style={styles.button.text}>
