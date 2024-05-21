@@ -11,6 +11,7 @@ import JoinMove from '../components/join_move';
 import Welcome from '../components/welcome';
 import WaitingRoom from '../components/waiting_room';
 import Question from '../components/question'
+import ShareMove from '../components/share_move';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,7 @@ const MainTabBar = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={Welcome} />
           <Stack.Screen name="CreateMove" component={CreateMove}/>
+          <Stack.Screen name="ShareMove" component={ShareMove} />
           <Stack.Screen name="JoinMove" component={JoinMove} />
           <Stack.Screen name="Question" component={Question} />
           <Stack.Screen name="WaitingRoom" component={WaitingRoom} />

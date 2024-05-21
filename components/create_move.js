@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SafeAreaView, navigation, View, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView, } from 'react-native';
 import MapView, { Circle } from 'react-native-maps';
-import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import useStore from '../store';
-// import { Ionicons } from '@expo/vector-icons';
-// const createMove = useStore((state) => state.createMove);
 
-const MapWithRadius = ({navigation}) => {
+const MapWithRadius = ({ navigation }) => {
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -32,7 +30,6 @@ const MapWithRadius = ({navigation}) => {
   }, [region]);
 
   const handleButtonPress = async (event) => {
-    // alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
     event.preventDefault();
     const moveInitInfo = {
       creator: creator,
@@ -55,18 +52,9 @@ const MapWithRadius = ({navigation}) => {
     } catch (error) {
       alert('Create Move Failed: ' + error);
     }
-  
-  //     await createMove(moveInitInfo);
-  //   };
-  //   const cancel = async (e) => {
-  //     e.preventDefault();
-  //     navigation.navigate('Welcome');
-  //   };
-  //   return (
   }
 
   const handleZoom = (type) => {
-    console.log('handleZoom called', type);
     let newDelta = type === 'in' ? region.latitudeDelta / 2 : region.latitudeDelta * 2;
     if (mapRef.current) {
       mapRef.current.animateToRegion({ 
@@ -79,36 +67,13 @@ const MapWithRadius = ({navigation}) => {
   
   return (
     <View style={{ flex: 1 }}>
-      <GooglePlacesAutocomplete containerStyle={styles.searchBarContainer}
-        placeholder="Search for location"
-        fetchDetails={true}
-        onPress={(data, details = null) => {
-          setRegion({
-            ...region,
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-          });
-        }}
-        query={{
-          key: 'AIzaSyCIPBNyynklZF6t7snFBUNaYDNP6VoM0EU',
-          language: 'en',
-        }}
-        styles={{
-          //center the search bar
-
-          container: { marginTop: 55, flex: 0, position: 'absolute', width: '80%', alignSelf:'center',justifySelf: 'center', zIndex: 1 },
-          listView: { backgroundColor: 'white' }
-        }}
-      />
       <MapView
-        style={{ flex: 1 }}
+        style={styles.map}
         ref={mapRef}
         initialRegion={region}
         onRegionChange={setRegion}
-        // move map to new region
         region={region}
         zoomEnabled={true}
-
       >
         <Circle
           center={{ latitude: region.latitude, longitude: region.longitude }}
@@ -117,27 +82,43 @@ const MapWithRadius = ({navigation}) => {
           strokeColor="rgba(100, 100, 240, 1)"
         />
       </MapView>
-  
-  {/* <Icon style={styles.zoom}
-  name='zoom-in'
-  type='material'
-  onPress={() => handleZoom('in')}
-  /> */}
-  {/* <Icon
-    name='zoom-out'
-    type='material'
-    onPress={() => handleZoom('out')}
-  /> */}
+
+      <SafeAreaView style={styles.searchContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={35} color="black" />
+        </TouchableOpacity>
+        <GooglePlacesAutocomplete
+          placeholder="Search for location"
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            setRegion({
+              ...region,
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            });
+          }}
+          query={{
+            key: 'AIzaSyCIPBNyynklZF6t7snFBUNaYDNP6VoM0EU',
+            language: 'en',
+          }}
+          styles={{
+            container: styles.searchBarContainer,
+            listView: { backgroundColor: 'white' }
+          }}
+        />
+      </SafeAreaView>
+
       <View style={styles.buttonContainer}>
-      <TouchableOpacity onPress={handleButtonPress}> 
-            <Text style={styles.buttonContainer.text}>
+        <TouchableOpacity onPress={handleButtonPress}> 
+          <Text style={styles.buttonText}>
             Create Move
-            </Text>
+          </Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.sliderContainer}>
-      <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>        
-      <Slider
+        <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>        
+        <Slider
           style={{ width: '100%', height: 40 }}
           minimumValue={160.934}
           maximumValue={4828.03} // 3 miles in meters
@@ -147,42 +128,53 @@ const MapWithRadius = ({navigation}) => {
           maximumTrackTintColor="#000000"
         />
       </View>
-
-     
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-zoom: {
-  position: 'absolute',
-  top: 20,
-  right: 20,
-  backgroundColor: 'white',
-  padding: 10,
-  borderRadius: 20,
-},
+  map: {
+    flex: 1,
+  },
+  searchContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: 45,
+    zIndex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingHorizontal: 10,
+  },
+  backButton: {
+    borderColor: 'black',
+    borderWidth: 3,
+    borderRadius: 30,
+    backgroundColor: 'white',
+    padding: 3,
+  },
+  searchBarContainer: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+  },
   buttonContainer: {
     position: 'absolute',
     bottom: 110,
-    // decrease height of button
-      height: 50,
-      backgroundColor: 'white',
-
+    height: 50,
+    backgroundColor: 'white',
     padding: 10,
-      borderWidth: 3,
-      borderColor: 'black',
-      justifySelf: 'center',
-      alignSelf: 'center',
-      width: 200,
-      borderRadius: 20,
-      padding: 10,
-      text: {
-          textAlign: 'center',
-          fontSize: 20,
-          fontWeight: 'bold',
-      }
-    
+    borderWidth: 3,
+    borderColor: 'black',
+    alignSelf: 'center',
+    width: 200,
+    borderRadius: 20,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   sliderContainer: {
     position: 'absolute',
