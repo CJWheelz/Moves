@@ -4,13 +4,11 @@ import MapView, { Circle } from 'react-native-maps';
 import { Icon } from 'react-native-elements';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
-import { Ionicons } from '@expo/vector-icons';
+// import { Ionicons } from '@expo/vector-icons';
+// import useStore from '../store'; 
+// const createMove = useStore((state) => state.createMove);
 
-<<<<<<< HEAD
 const MapWithRadius = ({author}) => {
-=======
-const MapWithRadius = ( {navigation} ) => {
->>>>>>> 04530e4e4c0a731b85b582e51c5ae56653b63cac
   const mapRef = useRef(null);
   const [region, setRegion] = useState({
     latitude: 37.7749,
@@ -24,26 +22,27 @@ const MapWithRadius = ( {navigation} ) => {
       mapRef.current.animateToRegion(region);
     }
   }, [region]);
-  const handleButtonPress = () => {
-    alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
-    const moveInitInfo = {
-      creator: author,
-      questions: [], // Add questions here
-      location: {
-        latitude: region.latitude,
-        longitude: region.longitude,
-        radius: radius,
-  },
-},
-createMove(moveInitInfo)
-        .then(() => {
-            console.log('Move created successfully');
-            // navigation.navigate('waiting_room');
-        })
-        .catch((error) => {
-            console.error('Error creating move:', error);
-        });
- };
+    const handleButtonPress = async (event) => {
+      alert('Move Created by!' + author + ' at ' + region.latitude + ', ' + region.longitude + ' with a radius of ' + (radius / 1609.34).toFixed(2) + ' miles');
+      event.preventDefault();
+      const moveInitInfo = {
+        creator: author,
+        questions: [], // Add questions here
+        location: {
+          latitude: region.latitude,
+          longitude: region.longitude,
+    },
+    radius: radius,
+    status: 'IN_PROGRESS',
+   };
+  //     await createMove(moveInitInfo);
+  //   };
+  //   const cancel = async (e) => {
+  //     e.preventDefault();
+  //     navigation.navigate('Welcome');
+  //   };
+
+
   const handleZoom = (type) => {
     console.log('handleZoom called', type);
     let newDelta = type === 'in' ? region.latitudeDelta / 2 : region.latitudeDelta * 2;
@@ -173,5 +172,5 @@ zoom: {
     padding: 10,
   }
 });
-
+}
 export default MapWithRadius;
