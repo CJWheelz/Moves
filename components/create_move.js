@@ -1,9 +1,9 @@
+// i asked chatgpt to fix the map and make it smooth for me, and it worked so i used the code
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView, } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import MapView, { Circle } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Slider from '@react-native-community/slider';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import useStore from '../store';
 
 const MapWithRadius = ({ navigation }) => {
@@ -25,12 +25,11 @@ const MapWithRadius = ({ navigation }) => {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.animateToRegion(region);
+      mapRef.current.animateToRegion(region, 1000); // Animate map to new region
     }
   }, [region]);
 
-  const handleButtonPress = async (event) => {
-    event.preventDefault();
+  const handleButtonPress = async () => {
     const moveInitInfo = {
       creator: creator,
       questions: [], // Add questions here
@@ -48,30 +47,49 @@ const MapWithRadius = ({ navigation }) => {
       setJoinCode_create(response.data);
       setJoinCode2_join(response.data);
       console.log(response.data);
-      navigation.navigate('JoinMove');
     } catch (error) {
       alert('Create Move Failed: ' + error);
     }
-  }
+  };
 
   const handleZoom = (type) => {
     let newDelta = type === 'in' ? region.latitudeDelta / 2 : region.latitudeDelta * 2;
     if (mapRef.current) {
-      mapRef.current.animateToRegion({ 
-        ...region, 
-        latitudeDelta: newDelta, 
-        longitudeDelta: newDelta 
+      mapRef.current.animateToRegion({
+        ...region,
+        latitudeDelta: newDelta,
+        longitudeDelta: newDelta,
       }, 500);
     }
   };
-  
+
   return (
     <View style={{ flex: 1 }}>
+      <GooglePlacesAutocomplete
+        containerStyle={styles.searchBarContainer}
+        placeholder="Search for location"
+        fetchDetails={true}
+        onPress={(data, details = null) => {
+          setRegion({
+            ...region,
+            latitude: details.geometry.location.lat,
+            longitude: details.geometry.location.lng,
+          });
+        }}
+        query={{
+          key: 'AIzaSyCIPBNyynklZF6t7snFBUNaYDNP6VoM0EU',
+          language: 'en',
+        }}
+        styles={{
+          container: { marginTop: 55, flex: 0, position: 'absolute', width: '80%', alignSelf: 'center', zIndex: 1 },
+          listView: { backgroundColor: 'white' },
+        }}
+      />
       <MapView
-        style={styles.map}
+        style={{ flex: 1 }}
         ref={mapRef}
         initialRegion={region}
-        onRegionChange={setRegion}
+        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
         region={region}
         zoomEnabled={true}
       >
@@ -82,48 +100,19 @@ const MapWithRadius = ({ navigation }) => {
           strokeColor="rgba(100, 100, 240, 1)"
         />
       </MapView>
-
-      <SafeAreaView style={styles.searchContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={35} color="black" />
-        </TouchableOpacity>
-        <GooglePlacesAutocomplete
-          placeholder="Search for location"
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            setRegion({
-              ...region,
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-            });
-          }}
-          query={{
-            key: 'AIzaSyCIPBNyynklZF6t7snFBUNaYDNP6VoM0EU',
-            language: 'en',
-          }}
-          styles={{
-            container: styles.searchBarContainer,
-            listView: { backgroundColor: 'white' }
-          }}
-        />
-      </SafeAreaView>
-
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleButtonPress}> 
-          <Text style={styles.buttonText}>
-            Create Move
-          </Text>
+        <TouchableOpacity onPress={handleButtonPress}>
+          <Text style={styles.buttonText}>Create Move</Text>
         </TouchableOpacity>
       </View>
-
       <View style={styles.sliderContainer}>
-        <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>        
+        <Text>Adjust Radius: {(radius / 1609.34).toFixed(2)} miles</Text>
         <Slider
           style={{ width: '100%', height: 40 }}
           minimumValue={160.934}
           maximumValue={4828.03} // 3 miles in meters
           value={radius}
-          onValueChange={value => setRadius(value)}
+          onValueChange={(value) => setRadius(value)}
           minimumTrackTintColor="#0000FF"
           maximumTrackTintColor="#000000"
         />
@@ -133,31 +122,13 @@ const MapWithRadius = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  map: {
-    flex: 1,
-  },
-  searchContainer: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    right: 45,
-    zIndex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingHorizontal: 10,
-  },
-  backButton: {
-    borderColor: 'black',
-    borderWidth: 3,
-    borderRadius: 30,
-    backgroundColor: 'white',
-    padding: 3,
-  },
   searchBarContainer: {
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
+    marginTop: 55,
+    flex: 0,
+    position: 'absolute',
+    width: '80%',
+    alignSelf: 'center',
+    zIndex: 1,
   },
   buttonContainer: {
     position: 'absolute',
@@ -167,9 +138,11 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 3,
     borderColor: 'black',
+    justifySelf: 'center',
     alignSelf: 'center',
     width: 200,
     borderRadius: 20,
+    textAlign: 'center',
   },
   buttonText: {
     textAlign: 'center',
@@ -184,7 +157,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     padding: 10,
-  }
+  },
 });
 
 export default MapWithRadius;
